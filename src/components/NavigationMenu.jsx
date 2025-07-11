@@ -17,7 +17,7 @@ function NavigationMenu() {
   const toggleDropdown = () => setShowDropdown(!showDropdown);
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur shadow-md rounded-3xl">
+    <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <h1 className="text-2xl font-bold text-black">FoodApp</h1>
