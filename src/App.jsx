@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import NavigationMenu from './components/NavigationMenu';
+import PrivateRoute from './routes/PrivateRoute';
+import Login from './pages/Login';
 import Home from './components/Home';
 import About from './components/About';
 import Team from './components/Team';
@@ -7,15 +8,13 @@ import Users from './components/Users';
 import UserProfile from './components/UserProfile';
 import NotFound from './components/NotFound';
 import Menu from './components/Menu';
-import Login from './pages/Login';
-import PrivateRoute from './routes/PrivateRoute';
+import NavigationMenu from './components/NavigationMenu';
 
 function App() {
   return (
     <BrowserRouter>
       <NavigationMenu />
       <Routes>
-        {/* Public Route */}
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes */}
@@ -27,7 +26,6 @@ function App() {
         <Route path="/users" element={<PrivateRoute><Users /></PrivateRoute>} />
         <Route path="/users/:id" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
 
-        {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

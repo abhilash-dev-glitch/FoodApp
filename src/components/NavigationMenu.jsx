@@ -8,13 +8,25 @@ function NavigationMenu() {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
+  // Keep checking for userId from localStorage
   useEffect(() => {
-    const storedId = localStorage.getItem("userId");
-    if (storedId) setUserId(storedId);
+    const interval = setInterval(() => {
+      const storedId = localStorage.getItem("userId");
+      setUserId(storedId);
+    }, 500);
+
+    return () => clearInterval(interval);
   }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleDropdown = () => setShowDropdown(!showDropdown);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    setUserId(null);
+    setShowDropdown(false);
+    navigate("/login");
+  };
 
   return (
     <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur shadow-md">
@@ -28,7 +40,7 @@ function NavigationMenu() {
           <Link to="/menu">Menu</Link>
           <Link to="/about">About</Link>
 
-          {userId && (
+          {userId ? (
             <div className="relative">
               <button
                 onClick={toggleDropdown}
@@ -37,7 +49,6 @@ function NavigationMenu() {
                 <User size={20} />
                 Profile
               </button>
-
               {showDropdown && (
                 <div className="absolute mt-2 right-0 bg-white shadow-md border rounded w-40 text-sm z-50">
                   <Link
@@ -47,12 +58,18 @@ function NavigationMenu() {
                   >
                     View Profile
                   </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                  >
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
+          ) : (
+            <Link to="/login">Login</Link>
           )}
-
-          {!userId && <Link to="/login">Login</Link>}
 
           {/* CTA */}
           <button className="ml-4 bg-black text-white px-5 py-2 rounded-full shadow-md hover:bg-orange-600 transition">
@@ -60,7 +77,7 @@ function NavigationMenu() {
           </button>
         </nav>
 
-        {/* Hamburger for mobile */}
+        {/* Mobile Menu Toggle */}
         <button
           onClick={toggleMenu}
           className="md:hidden text-black"
@@ -77,16 +94,25 @@ function NavigationMenu() {
           <Link to="/menu" onClick={() => setMenuOpen(false)}>Menu</Link>
           <Link to="/about" onClick={() => setMenuOpen(false)}>About</Link>
 
-          {userId && (
-            <Link
-              to={`/users/${userId}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              View Profile
-            </Link>
-          )}
-
-          {!userId && (
+          {userId ? (
+            <>
+              <Link
+                to={`/users/${userId}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                View Profile
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+                className="text-left"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
             <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
           )}
 
